@@ -1,0 +1,33 @@
+nav{
+    margin: 30px 51px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+a{
+    text-decoration: none;
+    color: #E0E0E0;
+    font-size: 13.93px;
+}
+
+a:hover{
+    color: black;
+}
+
+.text-buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login-btn{
+    font-size: 13.39px;
+    height: 32px;
+    width: 77px;
+}
+
+hr{
+    margin:auto 30px;
+    color: var(--divider-color);
+}

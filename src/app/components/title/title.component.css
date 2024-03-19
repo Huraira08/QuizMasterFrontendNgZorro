@@ -1,0 +1,8 @@
+.title{
+    font-size: 26.59px;
+    font-weight: normal;
+}
+
+.title span{
+    color: var(--yellow-theme-color);
+}

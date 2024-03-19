@@ -1,0 +1,18 @@
+.left-content h2{
+    font-size: 37px;
+    font-weight: 500;
+}
+
+.left-content p{
+    color: #828282;
+    font-size: 13px;
+    border-left: 1px solid #333333;
+    padding-left: 11px;
+}
+
+.button-type-1{
+    height: 37px;
+    width: 119px;
+    font-size: 13px;
+    font-weight: 500;
+}

@@ -1,1 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --primary-font: 'Poppins', sans-serif;
+    --secondary-font: 'Roboto', sans-serif;
+    --yellow-theme-color: #FCC822;
+    --black-theme-color: #333333;
+    --dark-title-color: #3b3b3b;
+    --divider-color: #E5E5E5;
+}
+
+*{
+    box-sizing: border-box;
+    font-family: var(--primary-font);
+}
+
+.container{
+    width: 100%!important;
+}
+
+.button-type-1{
+    background-color: var(--yellow-theme-color);
+    color: white;
+    font-size: 20px;
+    width: 123px;
+    height: 64px;
+    border: none;
+}
+
+.button-type-2{
+    background-color: white;
+    color: var(--yellow-theme-color);
+    border: 1px solid var(--yellow-theme-color);
+    font-size: 20px;
+}
+
+ /* style the input of type text */
+ input[type=text] {
+    width: 599px;
+    height: 74px;
+    padding: 29px;
+    color: var(--yellow-theme-color);
+}
