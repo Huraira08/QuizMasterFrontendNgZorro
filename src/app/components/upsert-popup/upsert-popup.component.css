@@ -1,0 +1,17 @@
+input[type=text].answers {
+    height: 20px;
+    width: 300px;
+    padding: 20px;
+    font-size: 20px;
+}
+
+input[type=text]#question {
+    height: 20px;
+    width: 450px;
+    padding: 20px;
+    font-size: 20px;
+}
+
+select{
+    width: 450px;
+}

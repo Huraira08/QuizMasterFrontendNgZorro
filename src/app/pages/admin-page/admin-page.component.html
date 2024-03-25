@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="d-flex justify-content-end">
+        <!-- Add quiz item Button -->
+        <button type="button" class="button-type-1 mb-2" (click)="addItem()">Add Item</button>
+    </div>
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Question</th>
+                <th>Answer Options</th>
+                <th>Correct Answer</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of quizItems">
+                <td>{{item.id}}</td>
+                <td class="question">
+                    {{item.question}}
+                </td>
+                <td>
+                    <div *ngFor="let answer of item.answers">
+                        {{answer}}
+                    </div>
+                </td>
+                <td class="correct-answer">{{item.answers[item.correctAnswerIndex]}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary button-type-1" (click)="EditItem(item)" >Edit</button>
+                    <button type="button" class="btn btn-danger button-type-2" (click)="deleteItem(item.id)" >Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

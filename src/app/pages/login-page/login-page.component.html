@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="row">
+        <div class="col-6 left-content d-flex flex-column justify-content-center align-items-center">
+            <app-title [fontSize]="45.7"></app-title>
+            <div class="welcome-text d-flex flex-column align-items-center my-4">
+                <p class="mb-0">Welcome  back!</p>
+                <p>Please login to your account.</p>
+            </div>
+            <form [formGroup]="userForm" (ngSubmit)="submitForm()">
+                <div *ngIf="invalidCredentials"
+                    class="text-danger mb-3">
+                    <small>Wrong Credentials</small>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">Email Address</span>
+                    <input 
+                    type="text"
+                    name="email"
+                    id="email"
+                    formControlName="email"
+                    class="form-control"
+                    >
+                </div>
+                <div *ngIf="userForm.controls['email'].invalid 
+                && (userForm.controls['email'].dirty || userForm.controls['email'].touched)"
+                    class="text-danger mb-3">
+                    <small>Email is required and must be valid</small>
+                </div>
+                <div class="mb-3"></div>
+                <div class="input-group ">
+                    <span class="input-group-text">Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input 
+                    type="password"
+                    name="password"
+                    id="password"
+                    formControlName="password"
+                    class="form-control"
+                    >
+                </div>
+                <div *ngIf="userForm.controls['password'].invalid && (userForm.controls['password'].dirty || userForm.controls['password'].touched)"
+                    class="text-danger mb-3">
+                    <small>Password is required</small>
+                </div>
+                <div class="mb-3"></div>
+
+                <div>
+                    <button type="submit" class="button-type-1" >
+                        <div *ngIf="loggingIn" class="spinner-border"></div>
+                        Login
+                    </button>
+                </div>
+            </form>
+
+            <a href="signup" class="text-dark mt-4 mr-auto">Sign up</a>
+        </div>
+        <div class="col-6 right-content">
+            <img src="../../../assets/graduate-hat.png" alt="">
+        </div>
+    </div>
+</div>

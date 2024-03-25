@@ -1,0 +1,28 @@
+.modal-body{
+    padding: 29px;
+}
+
+.button-type-1{
+    width: 120px;
+    height: 37px;
+}
+
+.result-container img{
+    position: relative;
+}
+.result-container .text-center{
+    position: absolute;
+}
+
+.result-container h3{
+    color: white;
+    /* position: absolute; */
+}
+
+.result-container h1{
+    /* position: absolute; */
+    color:white;
+    font-size: 168px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}

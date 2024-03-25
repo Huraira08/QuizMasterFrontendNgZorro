@@ -1,0 +1,19 @@
+td.question{
+    max-width: 350px;
+}
+
+.button-type-1{
+    height: 40px;
+    width: 100px;
+    margin:0;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.button-type-2{
+    height: 40px;
+    width: 100px;
+    margin:0;
+    border-radius: 10px;
+    font-size: 18px;
+}

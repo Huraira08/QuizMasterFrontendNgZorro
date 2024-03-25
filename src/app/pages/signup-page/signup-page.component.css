@@ -1,0 +1,26 @@
+.left-content{
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+
+.left-content h2{
+font-size: 45.7px;
+}
+
+.welcome-text{
+    font-size: 14.43px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.left-content a{
+    color:var(--yellow-theme-color)!important;
+    font-size: 16px;
+}
+
+.right-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}

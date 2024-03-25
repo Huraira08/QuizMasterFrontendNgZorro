@@ -13,6 +13,11 @@
     font-family: var(--primary-font);
 }
 
+/* a{
+    text-decoration: none;
+    color: black;
+} */
+
 .container{
     width: 100%!important;
 }
@@ -34,9 +39,9 @@
 }
 
  /* style the input of type text */
- input[type=text] {
-    width: 599px;
-    height: 74px;
+ input[type=text], input[type=password] {
+    width: 650px;
+    height: 50px;
     padding: 29px;
-    color: var(--yellow-theme-color);
+    color: var(--yellow-theme-color)!important;
 }

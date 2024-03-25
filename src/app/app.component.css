@@ -10,6 +10,14 @@ a{
     color: #E0E0E0;
     font-size: 13.93px;
 }
+.logo{
+    cursor: pointer;
+}
+
+.profile-dropdown{
+    font-size: 13.93px;
+    color: #FCC822;
+}
 
 a:hover{
     color: black;

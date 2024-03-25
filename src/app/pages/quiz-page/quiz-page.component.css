@@ -1,0 +1,10 @@
+
+.next-button{
+    background-color: var(--yellow-theme-color);
+    color: white;
+    border: none;
+    width: 89px;
+    height: 37px;
+    margin-top: 30px;
+    margin-right: 20px;
+}

@@ -1,0 +1,8 @@
+<div class="container">
+    <app-quiz-question
+    [quizItem]="quizItems[quizItemIndex]"
+    (answer)="receiveAnswer($event)"></app-quiz-question>
+    <div class="mt-5 d-flex justify-content-end">
+        <button type="button" class="next-button" (click)="handleNextClick()">Next</button>
+    </div>
+</div>

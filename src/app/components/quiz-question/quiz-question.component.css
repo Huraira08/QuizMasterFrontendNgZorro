@@ -1,0 +1,46 @@
+.question-container{
+    font-size: 27px;
+    color: white;
+    background-color: var(--yellow-theme-color);
+    padding: 52px 27px;
+}
+
+.answers-container{
+    margin: 33px 48px;
+}
+
+.button-type-1{
+    height: 84px;
+    background-color: #D1D1D1;
+    color: black;
+    font-size: 20px;
+    font-weight:600;
+}
+
+.answer-text{
+    cursor: pointer;
+    position: relative;
+}
+
+.answer-text p{
+    font-size: 13.39px;
+}
+
+.index{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.option-div{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.selected-option{
+    background-color: var(--yellow-theme-color);
+    color: white;
+}
+

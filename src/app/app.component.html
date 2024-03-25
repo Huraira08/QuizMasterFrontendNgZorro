@@ -1,15 +1,33 @@
-<div class="container mb-5">
+<div class="container mb-5" *ngIf="showNavBar">
   <nav class="row">
-    <div class="logo col-md-3">
-      <app-title></app-title>
+    <div class="logo col-md-3" (click)="navigateToLanding()">
+      <app-title [fontSize]="30"></app-title>
     </div>
     <div class="text-buttons col-md-6">
-      <a href="#">How it works?</a>
-      <a href="#">Features</a>
-      <a href="#">About us</a>      
-      <button type="button" class="button-type-2 login-btn">Login</button>
+      <ng-container *ngIf="isAdmin; else leaderboard">
+        <a routerLink="/admin" *ngIf="isAdmin">Admin Panel</a>
+      </ng-container>
+      <ng-template #leaderboard>
+        <a href="/leaderboard">Leaderboard</a>
+      </ng-template>
+      <a href="/start-quiz">Start-Quiz</a>
+      <a href="/results">Results</a>      
+      <div *ngIf="isLoggedIn && user; else notLoggedIn" class="d-flex">
+        <img src="../assets/avatar.png" alt="" srcset="" class="mr-1">
+        <div ngbDropdown class="d-inline-block">
+          <button type="button" class="bg-white border-0 profile-dropdown" id="dropdownBasic1" ngbDropdownToggle>
+            {{user.name}}
+          </button>
+          <div ngbDropdownMenu>
+            <button ngbDropdownItem (click)="logout()">Logout</button>
+          </div>
+        </div>
+      </div>
+      <ng-template #notLoggedIn>
+        <button type="button" class="button-type-2 login-btn" (click)="navigateToLogin()">Login</button>
+      </ng-template>
     </div>
   </nav>
   <hr>
 </div>
-<router-outlet></router-outlet>
+<router-outlet (activate)="toggleNavBar($event)"></router-outlet>
