@@ -25,7 +25,6 @@ export class LoginPageComponent {
   }
 
   submitForm(){
-    
     if(this.userForm.valid){
       this.loggingIn = true;
       this.user = this.userForm.value;

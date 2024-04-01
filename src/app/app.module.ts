@@ -20,6 +20,17 @@ import { AdminPageComponent } from './pages/admin-page/admin-page.component';
 import { UpsertPopupComponent } from './components/upsert-popup/upsert-popup.component';
 import { ResultsPageComponent } from './pages/results-page/results-page.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
+import { NZ_I18N } from 'ng-zorro-antd/i18n';
+import { en_US } from 'ng-zorro-antd/i18n';
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzInputModule } from 'ng-zorro-antd/input';
+
+registerLocaleData(en);
 
 @NgModule({
   declarations: [
@@ -50,9 +61,16 @@ import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component'
         allowedDomains: ['http://localhost:4200/', 'https://localhost:7129/'], // Specify your domain(s)
         // disallowedRoutes: [] // Routes that don't require token (optional)
       }
-    })
+    }),
+    BrowserAnimationsModule,
+
+    NzGridModule,
+    NzDividerModule,
+    NzInputModule
   ],
-  providers: [],
+  providers: [
+    { provide: NZ_I18N, useValue: en_US }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
