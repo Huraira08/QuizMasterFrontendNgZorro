@@ -27,7 +27,7 @@ export class QuizPageComponent implements OnInit {
   ngOnInit(): void {
     this.quizService.getQuizItems().subscribe({
       next:(quizItems)=>{
-        this.quizItems = quizItems;
+        this.quizItems = quizItems.sort(()=> Math.random() - 0.5);
       },
       error:(error)=>{
         console.log(error);

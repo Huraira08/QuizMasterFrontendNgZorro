@@ -11,6 +11,11 @@ a{
     color: #E0E0E0;
     font-size: 13.93px;
 }
+
+app-title{
+    cursor: pointer;
+}
+
 .logo{
     cursor: pointer;
 }

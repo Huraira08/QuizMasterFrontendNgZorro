@@ -6,6 +6,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Name</th>
                 <th>Attempted date</th>
                 <th>Score</th>
             </tr>
@@ -13,6 +14,7 @@
         <tbody>
             <tr *ngFor="let result of topResults">
                 <td>{{result.id}}</td>
+                <td>{{result.name}}</td>
                 <td>{{result.attemptedDate}}</td>
                 <td>{{result.score}}</td>
             </tr>
