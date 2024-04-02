@@ -16,6 +16,7 @@ export class QuizPageComponent implements OnInit {
   quizItems: Array<QuizItem> = []
   quizItemIndex!:number;
   score!: number;
+  isModalVisible = false;
 
   private modalService = inject(NgbModal);
 
@@ -57,35 +58,47 @@ export class QuizPageComponent implements OnInit {
       this.answerIndex = -1;
     }
     if(this.quizItemIndex >= this.quizItems.length){
-      const newResult: Result = {id: 0,attemptedDate: new Date(Date.now()),score: this.score}
-      const modalRef = this.modalService.open(ResultModalComponent, {size: "lg", centered: true});
-          modalRef.componentInstance.score = this.score;
-          modalRef.result.then(
-            (result)=>{
-              this.quizService.addResult(newResult).subscribe({
-                next:()=>{
-                  this.router.navigate(['/start-quiz'], {replaceUrl:true})
-                },
-                error:(error)=>{
-                  console.log(error);
-                  this.router.navigate(['/start-quiz'], {replaceUrl:true})
-                }
-              })
-            },
-            (reason)=>{
-              this.quizService.addResult(newResult).subscribe({
-                next:()=>{
-                  this.router.navigate(['/start-quiz'], {replaceUrl:true})
-                },
-                error:(error)=>{
-                  console.log(error);
-                  this.router.navigate(['/start-quiz'], {replaceUrl:true})
-                }
-              })
-            }
-          )
-      
-      
+      this.isModalVisible = true;
+      // const modalRef = this.modalService.open(ResultModalComponent, {size: "lg", centered: true});
+      //     modalRef.componentInstance.score = this.score;
+      //     modalRef.result.then(
+      //       (result)=>{
+      //         this.quizService.addResult(newResult).subscribe({
+      //           next:()=>{
+      //             this.router.navigate(['/start-quiz'], {replaceUrl:true})
+      //           },
+      //           error:(error)=>{
+      //             console.log(error);
+      //             this.router.navigate(['/start-quiz'], {replaceUrl:true})
+      //           }
+      //         })
+      //       },
+      //       (reason)=>{
+      //         this.quizService.addResult(newResult).subscribe({
+      //           next:()=>{
+      //             this.router.navigate(['/start-quiz'], {replaceUrl:true})
+      //           },
+      //           error:(error)=>{
+      //             console.log(error);
+      //             this.router.navigate(['/start-quiz'], {replaceUrl:true})
+      //           }
+      //         })
+      //       }
+      //     )
     }
+  }
+
+  handleClose(){
+    const newResult: Result = {id: 0,attemptedDate: new Date(Date.now()),score: this.score}
+    this.quizService.addResult(newResult).subscribe({
+      next:()=>{
+        this.router.navigate(['/start-quiz'], {replaceUrl:true})
+      },
+      error:(error)=>{
+        console.log(error);
+        this.router.navigate(['/start-quiz'], {replaceUrl:true})
+      }
+    })
+    this.isModalVisible = false;
   }
 }

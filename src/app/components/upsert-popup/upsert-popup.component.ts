@@ -36,7 +36,7 @@ import { QuizService } from 'src/app/services/quiz.service';
       </div>
 
       <div>
-        <label for="correctAnswer" class="mr-2">Department</label>
+        <label for="correctAnswer" class="mr-2">Correct Answer</label>
         <select name="correctAnswer" id="correctAnswer"
         class="form-control" formControlName="correctAnswer"
         (change)="changeCorrectAnswer($event)"

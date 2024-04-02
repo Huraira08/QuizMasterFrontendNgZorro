@@ -42,7 +42,13 @@ export class LoginPageComponent {
           console.log(err);
         }
       })
-      console.log(this.user);
+    }else {
+      Object.values(this.userForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
     }
   }
 }

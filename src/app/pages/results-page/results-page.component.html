@@ -1,5 +1,10 @@
 <div class="container">
-    <table class="table table-bordered">
+    <nz-table
+    [nzShowPagination]="results.length > 10"
+    nzShowSizeChanger
+    [nzData]="results"
+    (nzCurrentPageDataChange)="onCurrentPageDataChange"
+    >
         <thead>
             <tr>
                 <th>Id</th>
@@ -15,5 +20,5 @@
                 <td>{{result.score}}</td>
             </tr>
         </tbody>
-    </table>
+    </nz-table>
 </div>

@@ -12,4 +12,12 @@ export class LandingPageComponent {
   navigate(){
     this.router.navigate(['/start-quiz']);
   }
+
+  // open(){
+  //   this.isVisible = true;
+  // }
+
+  // handleClose(){
+  //   this.isVisible = false;
+  // }
 }

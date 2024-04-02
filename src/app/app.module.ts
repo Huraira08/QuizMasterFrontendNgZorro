@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER,NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -29,8 +29,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { ResultZorroModalComponent } from './components/result-zorro-modal/result-zorro-modal.component';
+import { NzAffixModule } from 'ng-zorro-antd/affix';
+
+import { AuthService } from './services/auth/auth.service';
 
 registerLocaleData(en);
+
+export function initApp(authService: AuthService){
+  return authService.validateToken();
+}
 
 @NgModule({
   declarations: [
@@ -46,7 +60,8 @@ registerLocaleData(en);
     AdminPageComponent,
     UpsertPopupComponent,
     ResultsPageComponent,
-    LeaderboardComponent
+    LeaderboardComponent,
+    ResultZorroModalComponent
   ],
   imports: [
     BrowserModule,
@@ -66,10 +81,19 @@ registerLocaleData(en);
 
     NzGridModule,
     NzDividerModule,
-    NzInputModule
+    NzInputModule,
+    NzDropDownModule,
+    NzIconModule,
+    NzSpinModule,
+    NzFormModule,
+    NzTableModule,
+    NzModalModule,
+    NzAffixModule
   ],
   providers: [
-    { provide: NZ_I18N, useValue: en_US }
+    { provide: NZ_I18N, useValue: en_US },
+    AuthService,
+    {provide: APP_INITIALIZER, useFactory: initApp, deps: [AuthService]}
   ],
   bootstrap: [AppComponent]
 })

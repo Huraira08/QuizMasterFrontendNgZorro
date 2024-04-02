@@ -11,6 +11,7 @@ import { UpsertPopupComponent } from 'src/app/components/upsert-popup/upsert-pop
 })
 export class AdminPageComponent implements OnInit {
   quizItems: QuizItem[] = [];
+  currentPageQuestions: readonly QuizItem[] = [];
 
   constructor(private quizService: QuizService, private modal: NgbModal){
   }
@@ -19,6 +20,8 @@ export class AdminPageComponent implements OnInit {
     this.quizService.getQuizItems().subscribe({
       next:quizItems=>{
         this.quizItems = quizItems;
+        // this.quizItems.push(...quizItems);
+        // this.quizItems.push(...quizItems);
         // for(let item of this.quizItems){
         //   console.log(item.correctAnswerIndex)
         // }
@@ -41,5 +44,9 @@ export class AdminPageComponent implements OnInit {
 
   deleteItem(id: number){
     this.quizService.deleteItem(id);
+  }
+
+  onCurrentPageDataChange(listOfCurrentPageData: readonly QuizItem[]){
+    this.currentPageQuestions = listOfCurrentPageData;
   }
 }

@@ -102,6 +102,10 @@ export class QuizService {
     console.log(user)
     return this.http.post(`https://localhost:7129/api/Result/${user.id}`, result, this.getHeaderWithToken()).pipe();
   }
+
+  getTop10Results(){
+    return this.http.get<Result[]>(this.apiUrl + '/top10', this.getHeaderWithToken()).pipe();
+  }
 }
 
 

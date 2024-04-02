@@ -8,7 +8,9 @@ import { QuizService } from 'src/app/services/quiz.service';
   styleUrls: ['./results-page.component.css']
 })
 export class ResultsPageComponent implements OnInit {
-  results: Result[] = []
+  results: Result[] = [];
+  currentPageResults: readonly Result[] = [];
+
   constructor(private quizService: QuizService){}
   ngOnInit(): void {
     this.quizService.getResults().subscribe({
@@ -19,5 +21,9 @@ export class ResultsPageComponent implements OnInit {
         console.log(error);
       }
     })
+  }
+
+  onCurrentPageDataChange(listOfCurrentPageData: readonly Result[]){
+    this.currentPageResults = listOfCurrentPageData;
   }
 }
