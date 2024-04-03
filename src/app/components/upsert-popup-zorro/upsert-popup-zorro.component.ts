@@ -1,25 +1,32 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import {NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QuizItem } from 'src/app/interfaces/quiz-item';
 import { QuizService } from 'src/app/services/quiz.service';
 
 @Component({
-  selector: 'app-upsert-popup',
-  // templateUrl: './upsert-popup.component.html',
-  styleUrls: ['./upsert-popup.component.css'],
+  selector: 'app-upsert-popup-zorro',
+  styleUrls: ['./upsert-popup-zorro.component.css'],
   template:`
-  <div class="modal-header">
+  <nz-modal
+      [(nzVisible)]="isVisible"
+      [nzContent]="modalContent"
+      [nzFooter]="null"
+      [nzWidth]="716"
+      [nzClosable]="true"
+      (nzOnCancel)="handleClose()"
+      [nzStyle]="{'top': '10px'}"
+    >
+      <ng-template #modalContent>
+      <div class="modal-header">
     <div>
       <h1>{{isEdit?'Edit':'Add'}} Question</h1>
     </div>
-		<button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
 	</div>
   <div class="modal-body">
     <form [formGroup]="questionForm" (ngSubmit)="submitForm()">
       <div class="mb-4 input-group">
         <span class="input-group-text">Question</span>
-        <input 
+        <input
         type="text"
         name="question"
         id="question"
@@ -52,18 +59,22 @@ import { QuizService } from 'src/app/services/quiz.service';
       </div>
     </form>
   </div>
+      </ng-template>
+    </nz-modal>
   `
 })
-export class UpsertPopupComponent implements OnInit {
+export class UpsertPopupZorroComponent implements OnInit, OnChanges{
+  @Input() isVisible!: boolean;
+  @Output() isVisibleChange = new EventEmitter<boolean>();
   questionForm!: FormGroup
-  activeModal = inject(NgbActiveModal)
   alphabetIndexArray = ['A', 'B', 'C', 'D']
   numberIndexArray = [0, 1, 2, 3];
   // quizItem!: QuizItem;
 
   // for edit
   @Input() isEdit: boolean = false;
-  @Input() oldQuizItem!: QuizItem;
+  @Output() isEditChange = new EventEmitter<boolean>();
+  @Input() oldQuizItem?: QuizItem;
 
   constructor(private formBuilder: FormBuilder, private quizService: QuizService){
     this.questionForm = this.formBuilder.group({
@@ -83,13 +94,29 @@ export class UpsertPopupComponent implements OnInit {
     
   }
   ngOnInit(): void {
+    console.log("Check")
     console.log(this.oldQuizItem)
-    if (this.isEdit && this.oldQuizItem) {
+    if (this.oldQuizItem && this.isEdit) {
       this.questionForm.patchValue({
         question: this.oldQuizItem.question,
         answers: this.oldQuizItem.answers,
         correctAnswer: this.oldQuizItem.correctAnswerIndex
       });
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['oldQuizItem'] && !changes['oldQuizItem'].firstChange){
+      if(this.isEdit){
+        this.questionForm.patchValue({
+          question: this.oldQuizItem!.question,
+          answers: this.oldQuizItem!.answers,
+          correctAnswer: this.oldQuizItem!.correctAnswerIndex
+        });
+      }
+    }
+    if(!this.isEdit){
+      this.questionForm.reset();
     }
   }
 
@@ -99,6 +126,13 @@ export class UpsertPopupComponent implements OnInit {
 
   changeCorrectAnswer(e: any){
     console.log(e);
+  }
+
+  handleClose(){
+    this.isEdit = false;
+    this.oldQuizItem = {} as QuizItem;
+    this.isVisible = false;
+    this.isVisibleChange.emit(false);
   }
 
   async submitForm(){
@@ -114,18 +148,21 @@ export class UpsertPopupComponent implements OnInit {
         }
       }else{
         console.log(quizItem)
-        quizItem.id = this.oldQuizItem.id
+        quizItem.id = this.oldQuizItem!.id
         try{
           await this.quizService.editQuizItem(quizItem);
         }catch(err){
           console.log(err);
         }
       }
-      this.activeModal.close();
     }
     else{
       console.log("Invalid form")
     }
-    
+    this.isVisible = false;
+    this.isVisibleChange.emit(false);
+    this.isEdit = false;
+    this.isEditChange.emit(false);
+    this.oldQuizItem = undefined;
   }
 }

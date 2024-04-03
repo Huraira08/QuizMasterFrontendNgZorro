@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LoginResult } from 'src/app/interfaces/login-result';
 import { User } from 'src/app/interfaces/user';
@@ -49,10 +49,13 @@ export class AuthService {
   }
 
   RegisterUser(user: User){
-    return this.http.post(this.apiUrl + '/Register', user).pipe();
+    const observable = this.http.post(this.apiUrl + '/Register', user)
+    return lastValueFrom(observable)
+    //.pipe();
   }
   login(user: User){
-    return this.http.post<LoginResult>(this.apiUrl + '/Login', user).pipe();
+    const observable = this.http.post<LoginResult>(this.apiUrl + '/Login', user);
+    return lastValueFrom(observable);
   }
 
   logout(){

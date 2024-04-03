@@ -37,7 +37,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ResultZorroModalComponent {
   @Input() isVisible!: boolean;
-  // @Output() isVisibleChange = new EventEmitter<boolean>();
   @Output() closeClicked = new EventEmitter<void>();
   @Input() score!: number;
 

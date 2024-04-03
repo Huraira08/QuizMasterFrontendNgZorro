@@ -13,15 +13,23 @@ export class LeaderboardComponent implements OnInit {
   constructor(private quizService: QuizService){}
 
   ngOnInit(): void {
-    this.quizService.getTop10Results().subscribe({
-      next: results=>{
-        this.topResults = results;
-        console.log(this.topResults)
-      },
-      error: error=>{
-        console.log(error);
-      }
+    this.quizService.getTop10Results()
+    .then(results=>{
+      this.topResults = results;
+      console.log(results)
     })
+    .catch(err=>{
+      console.log(err);
+    })
+    // .subscribe({
+    //   next: results=>{
+    //     this.topResults = results;
+    //     console.log(this.topResults)
+    //   },
+    //   error: error=>{
+    //     console.log(error);
+    //   }
+    // })
   }
   
 }

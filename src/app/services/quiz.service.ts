@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { QuizItem } from '../interfaces/quiz-item';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, last, lastValueFrom, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Result } from '../interfaces/result';
 import { User } from '../interfaces/user';
@@ -59,52 +59,65 @@ export class QuizService {
     return this.quizItemsSubject.asObservable();
   }
 
-  addQuizItem(quizItem: QuizItem){
+  async addQuizItem(quizItem: QuizItem){
     console.log(quizItem.id)
-    this.http.post(this.apiUrl, quizItem, this.getHeaderWithToken()).subscribe({
-      next:()=>{
-        this.fetchAllQuizItems();
-      },
-      error:(error)=>{
-        console.log(error);
-      }
-    });
+    const observable =  this.http.post(this.apiUrl, quizItem, this.getHeaderWithToken())
+    await lastValueFrom(observable)
+    this.fetchAllQuizItems();
+    // .subscribe({
+    //   next:()=>{
+    //     this.fetchAllQuizItems();
+    //   },
+    //   error:(error)=>{
+    //     console.log(error);
+    //   }
+    // });
   }
 
-  editQuizItem(quizItem: QuizItem){
-    this.http.put(this.apiUrl, quizItem, this.getHeaderWithToken()).subscribe({
-      next:()=>{
-        this.fetchAllQuizItems();
-      },
-      error:(error)=>{
-        console.log(error);
-      }
-    });
+  async editQuizItem(quizItem: QuizItem){
+    const observable = this.http.put(this.apiUrl, quizItem, this.getHeaderWithToken())
+    await lastValueFrom(observable)
+    this.fetchAllQuizItems();
+    // .subscribe({
+    //   next:()=>{
+    //     this.fetchAllQuizItems();
+    //   },
+    //   error:(error)=>{
+    //     console.log(error);
+    //   }
+    // });
   }
 
-  deleteItem(id: number){
-    this.http.delete(this.apiUrl + `/${id}`, this.getHeaderWithToken()).subscribe({
-      next:()=>{
-        this.fetchAllQuizItems();
-      },
-      error:(error)=>{
-        console.log(error);
-      }
-    })
+  async deleteItem(id: number){
+    const observable = this.http.delete(this.apiUrl + `/${id}`, this.getHeaderWithToken())
+    await lastValueFrom(observable)
+    this.fetchAllQuizItems();
+    // .subscribe({
+    //   next:()=>{
+    //     this.fetchAllQuizItems();
+    //   },
+    //   error:(error)=>{
+    //     console.log(error);
+    //   }
+    // })
   }
 
   getResults(): Observable<Result[]>{
     return this.resultsSubject.asObservable();
   }
 
-  addResult(result: Result){
+  async addResult(result: Result){
     const user = JSON.parse(localStorage.getItem('user')!) as User;
     console.log(user)
-    return this.http.post(`https://localhost:7129/api/Result/${user.id}`, result, this.getHeaderWithToken()).pipe();
+    const observable = this.http.post(`https://localhost:7129/api/Result/${user.id}`, result, this.getHeaderWithToken())
+    return await lastValueFrom(observable);
+    // .pipe();
   }
 
-  getTop10Results(){
-    return this.http.get<Result[]>(this.apiUrl + '/top10', this.getHeaderWithToken()).pipe();
+  async getTop10Results(){
+    const observable = this.http.get<Result[]>(this.apiUrl + '/top10', this.getHeaderWithToken())
+    return await lastValueFrom(observable);
+    // .pipe();
   }
 }
 

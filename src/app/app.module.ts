@@ -37,8 +37,10 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { ResultZorroModalComponent } from './components/result-zorro-modal/result-zorro-modal.component';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 import { AuthService } from './services/auth/auth.service';
+import { UpsertPopupZorroComponent } from './components/upsert-popup-zorro/upsert-popup-zorro.component';
 
 registerLocaleData(en);
 
@@ -61,7 +63,8 @@ export function initApp(authService: AuthService){
     UpsertPopupComponent,
     ResultsPageComponent,
     LeaderboardComponent,
-    ResultZorroModalComponent
+    ResultZorroModalComponent,
+    UpsertPopupZorroComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +91,8 @@ export function initApp(authService: AuthService){
     NzFormModule,
     NzTableModule,
     NzModalModule,
-    NzAffixModule
+    NzAffixModule,
+    NzPopconfirmModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },

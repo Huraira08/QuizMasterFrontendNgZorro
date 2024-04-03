@@ -88,17 +88,25 @@ export class QuizPageComponent implements OnInit {
     }
   }
 
-  handleClose(){
+  async handleClose(){
     const newResult: Result = {id: 0,attemptedDate: new Date(Date.now()),score: this.score}
-    this.quizService.addResult(newResult).subscribe({
-      next:()=>{
-        this.router.navigate(['/start-quiz'], {replaceUrl:true})
-      },
-      error:(error)=>{
-        console.log(error);
-        this.router.navigate(['/start-quiz'], {replaceUrl:true})
-      }
-    })
+    try{
+      this.quizService.addResult(newResult)
+      this.router.navigate(['/start-quiz'], {replaceUrl:true})
+    } catch(err){
+      console.log(err)
+      this.router.navigate(['/start-quiz'], {replaceUrl:true})
+    }
+
+    // .subscribe({
+    //   next:()=>{
+    //     this.router.navigate(['/start-quiz'], {replaceUrl:true})
+    //   },
+    //   error:(error)=>{
+    //     console.log(error);
+    //     this.router.navigate(['/start-quiz'], {replaceUrl:true})
+    //   }
+    // })
     this.isModalVisible = false;
   }
 }

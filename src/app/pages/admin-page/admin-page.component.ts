@@ -12,8 +12,11 @@ import { UpsertPopupComponent } from 'src/app/components/upsert-popup/upsert-pop
 export class AdminPageComponent implements OnInit {
   quizItems: QuizItem[] = [];
   currentPageQuestions: readonly QuizItem[] = [];
+  isModalVisible: boolean = false;
+  isEdit: boolean = false;
+  oldQuizItem?: QuizItem;
 
-  constructor(private quizService: QuizService, private modal: NgbModal){
+  constructor(private quizService: QuizService){
   }
 
   ngOnInit(): void {
@@ -33,17 +36,25 @@ export class AdminPageComponent implements OnInit {
   }
 
   addItem(){
-    const modalRef = this.modal.open(UpsertPopupComponent, {size: "lg"});
+    this.isEdit = false;
+    this.oldQuizItem = undefined
+    this.isModalVisible = true;
+    // const modalRef = this.modal.open(UpsertPopupComponent, {size: "lg"});
   }
 
   EditItem(item: QuizItem){
-    const modalRef = this.modal.open(UpsertPopupComponent, {size: "lg"});
-    modalRef.componentInstance.oldQuizItem = item;
-    modalRef.componentInstance.isEdit = true;
+    this.isEdit = true;
+    this.oldQuizItem = item;
+    console.log(this.oldQuizItem)
+    this.isModalVisible = true;
   }
 
-  deleteItem(id: number){
-    this.quizService.deleteItem(id);
+  async deleteItem(id: number){
+    try{
+      await this.quizService.deleteItem(id);
+    } catch(err){
+      console.log(err);
+    }
   }
 
   onCurrentPageDataChange(listOfCurrentPageData: readonly QuizItem[]){

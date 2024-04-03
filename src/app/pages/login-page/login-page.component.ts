@@ -14,6 +14,7 @@ export class LoginPageComponent {
   user!: User;
   invalidCredentials:boolean = false;
   loggingIn = false;
+  errorMessage: string = '';
 
   constructor(private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -24,24 +25,39 @@ export class LoginPageComponent {
     })
   }
 
-  submitForm(){
+  async submitForm(){
     if(this.userForm.valid){
       this.loggingIn = true;
       this.user = this.userForm.value;
-      this.authService.login(this.user).subscribe({
-        next:response=>{
-          this.authService.setToken(response.token, response.user);
-          this.invalidCredentials = false;
-          this.loggingIn = false;
-          this.router.navigate(['/landing-page']);
+      this.errorMessage = '';
+      try{
+        const response = await this.authService.login(this.user)
+        this.authService.setToken(response!.token, response!.user);
+        this.invalidCredentials = false;
+        this.loggingIn = false;
+        this.router.navigate(['/landing-page']);
+      }
+      catch(err){
+        this.invalidCredentials = true;
+        this.loggingIn = false;
+        console.log(err);
+        this.errorMessage = "Invalid credentials";
+      }
+
+      // .subscribe({
+      //   next:response=>{
+      //     this.authService.setToken(response.token, response.user);
+      //     this.invalidCredentials = false;
+      //     this.loggingIn = false;
+      //     this.router.navigate(['/landing-page']);
           
-        },
-        error:err=>{
-          this.invalidCredentials = true;
-          this.loggingIn = false;
-          console.log(err);
-        }
-      })
+      //   },
+      //   error:err=>{
+      //     this.invalidCredentials = true;
+      //     this.loggingIn = false;
+      //     console.log(err);
+      //   }
+      // })
     }else {
       Object.values(this.userForm.controls).forEach(control => {
         if (control.invalid) {

@@ -13,6 +13,7 @@ export class SignupPageComponent {
   userForm!: FormGroup;
   user!: User;
   signingIn = false;
+  errorMessage: string = ''
 
   constructor(private formBuilder: FormBuilder,
     private authService: AuthService,
@@ -24,20 +25,31 @@ export class SignupPageComponent {
     })
   }
 
-  submitForm(){
+  async submitForm(){
     if(this.userForm.valid){
+      this.errorMessage = '';
       this.signingIn = true;
       this.user = this.userForm.value;
-      this.authService.RegisterUser(this.user).subscribe({
-        next:()=>{
-          this.signingIn = false;
-          this.router.navigate(['/login'])
-        },
-        error:()=>{
-          this.signingIn = false;
-          console.log('error');
-        }
-      });
+      try{
+        const response = await this.authService.RegisterUser(this.user)
+        this.signingIn = false;
+        this.router.navigate(['/login'])
+      }catch(err){
+        this.signingIn = false;
+        console.log('error');
+        this.errorMessage = "Error: Could not register"
+      }
+      
+      // .subscribe({
+      //   next:()=>{
+      //     this.signingIn = false;
+      //     this.router.navigate(['/login'])
+      //   },
+      //   error:()=>{
+      //     this.signingIn = false;
+      //     console.log('error');
+      //   }
+      // });
       
       console.log(this.user);
     }
