@@ -1,24 +1,24 @@
 <div class="container">
-    <h1 class="title text-center">Here are the Top Scorers</h1>
+    <h1 class="title text-center">Here are Top 10 Results</h1>
 
-<ng-container *ngIf="topResults.length > 0">
-    <nz-table [nzData]="topResults">
-        <thead>
-            <tr>
-                <th>Quiz Id</th>
-                <th>Name</th>
-                <th>Attempted date</th>
-                <th>Score</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let result of topResults">
-                <td>{{result.id}}</td>
-                <td>{{result.name}}</td>
-                <td>{{result.attemptedDate}}</td>
-                <td>{{result.score}}</td>
-            </tr>
-        </tbody>
-    </nz-table>
-</ng-container>
+    <ng-container *ngIf="topResults.length > 0">
+        <nz-table [nzData]="topResults">
+            <thead>
+                <tr>
+                    <th>Quiz Id</th>
+                    <th>Name</th>
+                    <th>Attempted date</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let result of topResults">
+                    <td>{{result.id}}</td>
+                    <td>{{result.name}}</td>
+                    <td>{{result.attemptedDate}}</td>
+                    <td>{{result.score}}</td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </ng-container>
 </div>

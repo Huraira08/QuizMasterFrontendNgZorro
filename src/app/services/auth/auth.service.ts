@@ -107,7 +107,7 @@ export class AuthService {
             this.clearToken();
             this.router.navigate(['/login']);
           }else{
-            console.log("Token is valid")
+            // console.log("Token is valid")
           }
         },
         error: error=>{
