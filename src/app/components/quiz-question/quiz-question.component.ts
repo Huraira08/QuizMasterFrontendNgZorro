@@ -13,7 +13,6 @@ export class QuizQuestionComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['quizItem'] && !changes['quizItem'].firstChange){
       this.selectedAnswer = -1;
-      // console.log("Changed")
     }
   }
 
@@ -22,12 +21,7 @@ export class QuizQuestionComponent implements OnChanges {
   selectedAnswer: number = -1;
 
   selectAnswer(index: number){
-    // console.log(index)
     this.selectedAnswer = index;
     this.answer.emit(this.selectedAnswer);
-  }
-  
-  // emitAnswer(){
-  //   this.answer.emit(this.selectedAnswer);
-  // }
+  } 
 }

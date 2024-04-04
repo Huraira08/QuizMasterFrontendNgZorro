@@ -3,8 +3,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { QuizItem } from 'src/app/interfaces/quiz-item';
 import { QuizService } from 'src/app/services/quiz.service';
-import { ResultModalComponent } from 'src/app/components/result-modal/result-modal.component';
 import { Result } from 'src/app/interfaces/result';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { ResultZorroModalComponent } from 'src/app/components/result-zorro-modal/result-zorro-modal.component';
 
 @Component({
   selector: 'app-quiz-page',
@@ -16,30 +17,29 @@ export class QuizPageComponent implements OnInit {
   quizItems: Array<QuizItem> = []
   quizItemIndex!:number;
   score!: number;
-  isModalVisible = false;
 
-  private modalService = inject(NgbModal);
 
-  constructor(private quizService: QuizService, private router: Router){
+  constructor(private quizService: QuizService,
+     private router: Router,
+     private modalService: NzModalService
+     ){
 
   }
 
   ngOnInit(): void {
-    this.quizService.getQuizItems().subscribe({
-      next:(quizItems)=>{
-        this.quizItems = quizItems.sort(()=> Math.random() - 0.5);
-      },
-      error:(error)=>{
-        console.log(error);
-      }
+    this.quizService.getQuizItems()
+    .then(quizItems=>{
+       this.quizItems = quizItems.sort(()=> Math.random() - 0.5);
+    }).catch(error=>{
+      console.log(error);
     })
+    
     this.quizItemIndex = 0;
     this.score = 0;
   }
 
   receiveAnswer(answer:number){
     this.answerIndex = answer;
-    // console.log(this.answer)
   }
 
   handleScore(){
@@ -50,7 +50,6 @@ export class QuizPageComponent implements OnInit {
   }
 
   handleNextClick(){
-    // console.log(this.quizItems[this.answerIndex].question)
     if(this.answerIndex < 0)return;
     if(this.quizItemIndex < this.quizItems.length){
       this.handleScore();
@@ -58,55 +57,47 @@ export class QuizPageComponent implements OnInit {
       this.answerIndex = -1;
     }
     if(this.quizItemIndex >= this.quizItems.length){
-      this.isModalVisible = true;
-      // const modalRef = this.modalService.open(ResultModalComponent, {size: "lg", centered: true});
-      //     modalRef.componentInstance.score = this.score;
-      //     modalRef.result.then(
-      //       (result)=>{
-      //         this.quizService.addResult(newResult).subscribe({
-      //           next:()=>{
-      //             this.router.navigate(['/start-quiz'], {replaceUrl:true})
-      //           },
-      //           error:(error)=>{
-      //             console.log(error);
-      //             this.router.navigate(['/start-quiz'], {replaceUrl:true})
-      //           }
-      //         })
-      //       },
-      //       (reason)=>{
-      //         this.quizService.addResult(newResult).subscribe({
-      //           next:()=>{
-      //             this.router.navigate(['/start-quiz'], {replaceUrl:true})
-      //           },
-      //           error:(error)=>{
-      //             console.log(error);
-      //             this.router.navigate(['/start-quiz'], {replaceUrl:true})
-      //           }
-      //         })
-      //       }
-      //     )
+      this.modalService.create({
+        nzContent: ResultZorroModalComponent,
+        nzData:{
+          score: this.score
+        },
+        nzFooter: null,
+        nzWidth: "716px",
+        nzClosable: false
+      })
+
+      this.modalService.afterAllClose.subscribe(async ()=>{
+        const newResult = {id: 0, attemptedDate: new Date(Date.now()), score: this.score }
+        this.quizService.addResult(newResult)
+        .then(response=>{
+          console.log(response);
+           this.router.navigate(['/start-quiz'], {replaceUrl:true})
+        })
+        .catch(error=>{
+           console.log(error);
+           this.router.navigate(['/start-quiz'], {replaceUrl:true})
+        })
+        // try{
+        //   const response = await this.quizService.addResult(newResult)
+        //   console.log(response)
+        //   this.router.navigate(['/start-quiz'], {replaceUrl:true})
+        // } catch(err){
+        //   console.log(err)
+        //   this.router.navigate(['/start-quiz'], {replaceUrl:true})
+        // }
+      })
     }
   }
 
-  async handleClose(){
-    const newResult: Result = {id: 0,attemptedDate: new Date(Date.now()),score: this.score}
-    try{
-      this.quizService.addResult(newResult)
-      this.router.navigate(['/start-quiz'], {replaceUrl:true})
-    } catch(err){
-      console.log(err)
-      this.router.navigate(['/start-quiz'], {replaceUrl:true})
-    }
-
-    // .subscribe({
-    //   next:()=>{
-    //     this.router.navigate(['/start-quiz'], {replaceUrl:true})
-    //   },
-    //   error:(error)=>{
-    //     console.log(error);
-    //     this.router.navigate(['/start-quiz'], {replaceUrl:true})
-    //   }
-    // })
-    this.isModalVisible = false;
-  }
+  // async handleClose(){
+  //   const newResult: Result = {id: 0,attemptedDate: new Date(Date.now()),score: this.score}
+  //   try{
+  //     this.quizService.addResult(newResult)
+  //     this.router.navigate(['/start-quiz'], {replaceUrl:true})
+  //   } catch(err){
+  //     console.log(err)
+  //     this.router.navigate(['/start-quiz'], {replaceUrl:true})
+  //   }
+  // }
 }

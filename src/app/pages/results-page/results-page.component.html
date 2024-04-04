@@ -3,7 +3,7 @@
     [nzShowPagination]="results.length > 10"
     nzShowSizeChanger
     [nzData]="results"
-    (nzCurrentPageDataChange)="onCurrentPageDataChange"
+    (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
     >
         <thead>
             <tr>
@@ -14,7 +14,7 @@
         </thead>
 
         <tbody>
-            <tr *ngFor="let result of results">
+            <tr *ngFor="let result of currentPageResults">
                 <td>{{result.id}}</td>
                 <td>{{result.attemptedDate | date}}</td>
                 <td>{{result.score}}</td>

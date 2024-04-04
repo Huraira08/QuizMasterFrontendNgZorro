@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { QuizItem } from '../interfaces/quiz-item';
-import { BehaviorSubject, last, lastValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, last, lastValueFrom } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Result } from '../interfaces/result';
 import { User } from '../interfaces/user';
@@ -9,18 +9,13 @@ import { User } from '../interfaces/user';
   providedIn: 'root'
 })
 export class QuizService {
-  quizItems!: Array<QuizItem>
-  quizItemsSubject = new BehaviorSubject<QuizItem[]>([]);
-  results!: Result[]
-  resultsSubject = new BehaviorSubject<Result[]>([]);
+  // results!: Result[]
+  // resultsSubject = new BehaviorSubject<Result[]>([]);
   idIndex: number = 0;
   private apiUrl: string = 'https://localhost:7129/api/QuizItem';
   private TOKEN_KEY = 'jwt_token';
 
   constructor(private http: HttpClient) { 
-    this.fetchAllQuizItems();
-
-    this.fetchResults();
   }
 
   getHeaderWithToken(){
@@ -30,93 +25,42 @@ export class QuizService {
     return {headers};
   }
 
-  fetchAllQuizItems(){
-    this.http.get<QuizItem[]>(this.apiUrl, this.getHeaderWithToken()).subscribe({
-      next:quizItems=>{
-        this.quizItems = quizItems;
-        this.quizItemsSubject.next(this.quizItems);
-      },
-      error:(error)=>{
-        console.log(error);
-      }
-    });
-  }
-
-  fetchResults(){
-    const user = JSON.parse(localStorage.getItem('user')!) as User;
-    this.http.get<Result[]>('https://localhost:7129/api/Result/'+user.id, this.getHeaderWithToken()).subscribe({
-      next: results=>{
-        this.results = results;
-        this.resultsSubject.next(this.results);
-      },
-      error:(error)=>{
-        console.log(error);
-      }
-    });
-  }
-
-  getQuizItems():Observable<QuizItem[]>{
-    return this.quizItemsSubject.asObservable();
+  async getQuizItems():Promise<QuizItem[]>{
+    const observable = this.http.get<QuizItem[]>(this.apiUrl, this.getHeaderWithToken())
+    return await firstValueFrom(observable);
   }
 
   async addQuizItem(quizItem: QuizItem){
-    console.log(quizItem.id)
     const observable =  this.http.post(this.apiUrl, quizItem, this.getHeaderWithToken())
-    await lastValueFrom(observable)
-    this.fetchAllQuizItems();
-    // .subscribe({
-    //   next:()=>{
-    //     this.fetchAllQuizItems();
-    //   },
-    //   error:(error)=>{
-    //     console.log(error);
-    //   }
-    // });
+    return await firstValueFrom(observable)
   }
 
   async editQuizItem(quizItem: QuizItem){
     const observable = this.http.put(this.apiUrl, quizItem, this.getHeaderWithToken())
-    await lastValueFrom(observable)
-    this.fetchAllQuizItems();
-    // .subscribe({
-    //   next:()=>{
-    //     this.fetchAllQuizItems();
-    //   },
-    //   error:(error)=>{
-    //     console.log(error);
-    //   }
-    // });
+    return await lastValueFrom(observable)
   }
 
   async deleteItem(id: number){
     const observable = this.http.delete(this.apiUrl + `/${id}`, this.getHeaderWithToken())
-    await lastValueFrom(observable)
-    this.fetchAllQuizItems();
-    // .subscribe({
-    //   next:()=>{
-    //     this.fetchAllQuizItems();
-    //   },
-    //   error:(error)=>{
-    //     console.log(error);
-    //   }
-    // })
+    return await lastValueFrom(observable)
   }
 
-  getResults(): Observable<Result[]>{
-    return this.resultsSubject.asObservable();
-  }
-
-  async addResult(result: Result){
+  async getResults(): Promise<Result[]>{
     const user = JSON.parse(localStorage.getItem('user')!) as User;
-    console.log(user)
-    const observable = this.http.post(`https://localhost:7129/api/Result/${user.id}`, result, this.getHeaderWithToken())
-    return await lastValueFrom(observable);
-    // .pipe();
+    const observable = this.http.get<Result[]>('https://localhost:7129/api/Result/' + user.id, this.getHeaderWithToken())
+    return await firstValueFrom(observable);
+  }
+
+  async addResult(result: any){
+    const user = JSON.parse(localStorage.getItem('user')!) as User;
+    result["userId"] = user.id;
+    const observable = this.http.post(`https://localhost:7129/api/Result`, result, this.getHeaderWithToken())
+    return await firstValueFrom(observable);
   }
 
   async getTop10Results(){
-    const observable = this.http.get<Result[]>(this.apiUrl + '/top10', this.getHeaderWithToken())
-    return await lastValueFrom(observable);
+    const observable = this.http.get<Result[]>('https://localhost:7129/api/Result/top10', this.getHeaderWithToken())
+    return await firstValueFrom(observable);
     // .pipe();
   }
 }

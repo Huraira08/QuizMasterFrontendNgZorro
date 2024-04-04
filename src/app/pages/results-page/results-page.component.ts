@@ -13,13 +13,12 @@ export class ResultsPageComponent implements OnInit {
 
   constructor(private quizService: QuizService){}
   ngOnInit(): void {
-    this.quizService.getResults().subscribe({
-      next: results=>{
-        this.results = results;
-      },
-      error: error=>{
-        console.log(error);
-      }
+    this.quizService.getResults()
+    .then(results=>{
+      this.results = results;
+    })
+    .catch(error=>{
+      console.error(error);
     })
   }
 

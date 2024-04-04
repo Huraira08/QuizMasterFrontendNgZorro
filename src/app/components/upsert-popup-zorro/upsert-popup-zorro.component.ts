@@ -1,25 +1,21 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { QuizItem } from 'src/app/interfaces/quiz-item';
 import { QuizService } from 'src/app/services/quiz.service';
+
+export interface IModalData{
+  isEdit: boolean,
+  oldQuizItem?: QuizItem
+}
 
 @Component({
   selector: 'app-upsert-popup-zorro',
   styleUrls: ['./upsert-popup-zorro.component.css'],
   template:`
-  <nz-modal
-      [(nzVisible)]="isVisible"
-      [nzContent]="modalContent"
-      [nzFooter]="null"
-      [nzWidth]="716"
-      [nzClosable]="true"
-      (nzOnCancel)="handleClose()"
-      [nzStyle]="{'top': '10px'}"
-    >
-      <ng-template #modalContent>
       <div class="modal-header">
     <div>
-      <h1>{{isEdit?'Edit':'Add'}} Question</h1>
+      <h1>{{modalData.isEdit?'Edit':'Add'}} Question</h1>
     </div>
 	</div>
   <div class="modal-body">
@@ -55,28 +51,23 @@ import { QuizService } from 'src/app/services/quiz.service';
       </div>
 
       <div class="mt-3 d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary">{{isEdit? 'Edit' : 'Add'}} Question</button>
+        <button type="submit" class="btn btn-primary">{{modalData.isEdit? 'Edit' : 'Add'}} Question</button>
       </div>
     </form>
   </div>
-      </ng-template>
-    </nz-modal>
   `
 })
-export class UpsertPopupZorroComponent implements OnInit, OnChanges{
-  @Input() isVisible!: boolean;
-  @Output() isVisibleChange = new EventEmitter<boolean>();
+export class UpsertPopupZorroComponent implements OnInit{
   questionForm!: FormGroup
   alphabetIndexArray = ['A', 'B', 'C', 'D']
   numberIndexArray = [0, 1, 2, 3];
-  // quizItem!: QuizItem;
 
-  // for edit
-  @Input() isEdit: boolean = false;
-  @Output() isEditChange = new EventEmitter<boolean>();
-  @Input() oldQuizItem?: QuizItem;
 
-  constructor(private formBuilder: FormBuilder, private quizService: QuizService){
+  constructor(private formBuilder: FormBuilder, 
+    private quizService: QuizService, 
+    private modalRef: NzModalRef,
+    @Inject(NZ_MODAL_DATA) public modalData: IModalData
+    ){
     this.questionForm = this.formBuilder.group({
       question: ['',[Validators.required]],
       answers: this.formBuilder.array([
@@ -94,29 +85,12 @@ export class UpsertPopupZorroComponent implements OnInit, OnChanges{
     
   }
   ngOnInit(): void {
-    console.log("Check")
-    console.log(this.oldQuizItem)
-    if (this.oldQuizItem && this.isEdit) {
+    if (this.modalData.oldQuizItem && this.modalData.isEdit) {
       this.questionForm.patchValue({
-        question: this.oldQuizItem.question,
-        answers: this.oldQuizItem.answers,
-        correctAnswer: this.oldQuizItem.correctAnswerIndex
+        question: this.modalData.oldQuizItem.question,
+        answers: this.modalData.oldQuizItem.answers,
+        correctAnswer: this.modalData.oldQuizItem.correctAnswerIndex
       });
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if(changes['oldQuizItem'] && !changes['oldQuizItem'].firstChange){
-      if(this.isEdit){
-        this.questionForm.patchValue({
-          question: this.oldQuizItem!.question,
-          answers: this.oldQuizItem!.answers,
-          correctAnswer: this.oldQuizItem!.correctAnswerIndex
-        });
-      }
-    }
-    if(!this.isEdit){
-      this.questionForm.reset();
     }
   }
 
@@ -129,10 +103,7 @@ export class UpsertPopupZorroComponent implements OnInit, OnChanges{
   }
 
   handleClose(){
-    this.isEdit = false;
-    this.oldQuizItem = {} as QuizItem;
-    this.isVisible = false;
-    this.isVisibleChange.emit(false);
+    this.modalRef.close();
   }
 
   async submitForm(){
@@ -140,17 +111,17 @@ export class UpsertPopupZorroComponent implements OnInit, OnChanges{
       const quizItem: QuizItem  = this.questionForm.value;
       quizItem.correctAnswerIndex = this.questionForm.value['correctAnswer']
       // console.log(quizItem);
-      if(!this.isEdit){
+      if(!this.modalData.isEdit){
         try{
-          await this.quizService.addQuizItem(quizItem);
+          const response = await this.quizService.addQuizItem(quizItem);
         }catch(err){
           console.log(err);
         }
       }else{
-        console.log(quizItem)
-        quizItem.id = this.oldQuizItem!.id
+        quizItem.id = this.modalData.oldQuizItem!.id
         try{
-          await this.quizService.editQuizItem(quizItem);
+          const response = await this.quizService.editQuizItem(quizItem);
+          console.log(response)
         }catch(err){
           console.log(err);
         }
@@ -159,10 +130,6 @@ export class UpsertPopupZorroComponent implements OnInit, OnChanges{
     else{
       console.log("Invalid form")
     }
-    this.isVisible = false;
-    this.isVisibleChange.emit(false);
-    this.isEdit = false;
-    this.isEditChange.emit(false);
-    this.oldQuizItem = undefined;
+    this.modalRef.close();
   }
 }

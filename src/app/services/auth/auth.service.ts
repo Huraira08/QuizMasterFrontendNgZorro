@@ -16,7 +16,7 @@ export interface TokenValidationResponse{
 export class AuthService {
   private isUserLoggedIn: boolean = false;
   private isUserLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private isAuthenticated: boolean = false;
+  // private isAuthenticated: boolean = false;
   private user!: User;
   private apiUrl = 'https://localhost:7129/api/Authentication'
   // private loginUrl = 'https://localhost:7129/api/Authentication/Login'
