@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Inject, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { QuizItem } from 'src/app/interfaces/quiz-item';
 import { QuizService } from 'src/app/services/quiz.service';
 
@@ -66,7 +67,8 @@ export class UpsertPopupZorroComponent implements OnInit{
   constructor(private formBuilder: FormBuilder, 
     private quizService: QuizService, 
     private modalRef: NzModalRef,
-    @Inject(NZ_MODAL_DATA) public modalData: IModalData
+    @Inject(NZ_MODAL_DATA) public modalData: IModalData,
+    private notification: NzNotificationService
     ){
     this.questionForm = this.formBuilder.group({
       question: ['',[Validators.required]],
@@ -113,17 +115,25 @@ export class UpsertPopupZorroComponent implements OnInit{
       // console.log(quizItem);
       if(!this.modalData.isEdit){
         try{
-          const response = await this.quizService.addQuizItem(quizItem);
+          await this.quizService.addQuizItem(quizItem);
+          this.notification.create('success', 'Success', 'New Question added');
         }catch(err){
           console.log(err);
+          this.notification.create('error', 'Operation failed', `Question not Added`);
         }
       }else{
         quizItem.id = this.modalData.oldQuizItem!.id
         try{
-          const response = await this.quizService.editQuizItem(quizItem);
-          console.log(response)
+          const response: any = await this.quizService.editQuizItem(quizItem);
+          const {rowsAffected} = response;
+          if(rowsAffected > 0){
+            this.notification.create('success', 'Success', `${rowsAffected} row${rowsAffected === 1?'':'s'} updated`);
+          }else{
+            this.notification.create('error', 'Operation failed', `Question not updated`);
+          }
         }catch(err){
           console.log(err);
+          this.notification.create('error', 'Operation failed', `Question not updated`);
         }
       }
     }
