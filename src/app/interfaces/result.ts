@@ -1,5 +1,5 @@
 export interface Result {
-    id: number,
+    id?: string,
     name?: string,
     attemptedDate: Date,
     score: number,

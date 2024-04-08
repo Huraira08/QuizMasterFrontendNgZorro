@@ -68,7 +68,7 @@ export class QuizPageComponent implements OnInit {
       })
 
       this.modalService.afterAllClose.subscribe(async ()=>{
-        const newResult = {id: 0, attemptedDate: new Date(Date.now()), score: this.score }
+        const newResult = {id: '',name:'', attemptedDate: new Date(Date.now()), score: this.score, }
         this.quizService.addResult(newResult)
         .then(response=>{
           console.log(response);
@@ -78,26 +78,7 @@ export class QuizPageComponent implements OnInit {
            console.log(error);
            this.router.navigate(['/start-quiz'], {replaceUrl:true})
         })
-        // try{
-        //   const response = await this.quizService.addResult(newResult)
-        //   console.log(response)
-        //   this.router.navigate(['/start-quiz'], {replaceUrl:true})
-        // } catch(err){
-        //   console.log(err)
-        //   this.router.navigate(['/start-quiz'], {replaceUrl:true})
-        // }
       })
     }
   }
-
-  // async handleClose(){
-  //   const newResult: Result = {id: 0,attemptedDate: new Date(Date.now()),score: this.score}
-  //   try{
-  //     this.quizService.addResult(newResult)
-  //     this.router.navigate(['/start-quiz'], {replaceUrl:true})
-  //   } catch(err){
-  //     console.log(err)
-  //     this.router.navigate(['/start-quiz'], {replaceUrl:true})
-  //   }
-  // }
 }

@@ -1,7 +1,7 @@
-<div class="container" *ngIf="quizItem">
-    <div class="question-container mb-3">{{quizItem.question}}</div>
+<div class="container">
+    <div class="question-container mb-3">{{quizItem?.question}}</div>
     <div class="answers-container d-flex justify-content-between">
-        <div *ngFor="let option of quizItem.answers; let i = index;" class="answer-container">
+        <div *ngFor="let option of quizItem?.answers; let i = index;" class="answer-container">
             <div class="button-type-1 answer-text" 
                 (click)="selectAnswer(i)" 
                 [ngClass]="{'selected-option': selectedAnswer === i}">

@@ -7,7 +7,7 @@ import { QuizItem } from 'src/app/interfaces/quiz-item';
   styleUrls: ['./quiz-question.component.css']
 })
 export class QuizQuestionComponent implements OnChanges {
-  @Input() quizItem!: QuizItem;
+  @Input() quizItem?: QuizItem;
   @Output() answer = new EventEmitter<number>();
 
   ngOnChanges(changes: SimpleChanges): void {
