@@ -8,3 +8,19 @@
     margin-top: 30px;
     margin-right: 20px;
 }
+
+.timer-container {
+    width: 70px; 
+    height: 70px; 
+    border-radius: 50%; 
+    background-color: var(--yellow-theme-color); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .timer {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+  }

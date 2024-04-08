@@ -2,7 +2,17 @@
     <app-quiz-question
     [quizItem]="quizItems[quizItemIndex]"
     (answer)="receiveAnswer($event)"></app-quiz-question>
-    <div class="mt-5 d-flex justify-content-end">
-        <button type="button" class="next-button" (click)="handleNextClick()">Next</button>
+    <div class="mt-5 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div style="font-weight: bold;">Remaining Time :&nbsp;</div>
+            <div class="timer-container" *ngIf="timer >= 0">
+                <div class="timer">{{timer * 1000 | date : 'mm:ss'}}</div>
+            </div>
+        </div>
+        <button type="button" class="next-button mb-1" (click)="handleNextClick()">Next</button>
     </div>
+
+    <!-- display timer with yello circular avatar -->
+    <!-- <h2 *ngIf="timer >= 0">{{floor(timer / 60).toFixed(0)}} : {{(timer % 60).toString().padStart(2,'0')}}</h2> -->
+    
 </div>
